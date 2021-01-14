@@ -13,12 +13,13 @@ GUILD = os.getenv('DISCORD_GUILD')
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents = intents)
 bot.remove_command('help')
-
+hassave = 0
+saveVoice = []
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=GUILD)
-    os.system('cls')
-    await bot.change_presence(activity=discord.Game(name="!info"))
+    #os.system('cls')
+    await bot.change_presence(activity=discord.Game(name="!info for help"))
     print(
         '[-------------Connection success-------------] \n'
         f'{bot.user} Is connected to {guild.name}'
@@ -65,13 +66,30 @@ async def onlinerole(ctx, role: discord.Role):
     embed.add_field(name=role.name, value=f'{role.mention} has {onlinemems} out of {rolemems} online', inline=False)
     await ctx.send(embed=embed)
 
-async def checkvoice():
+async def changestatus():
     await bot.wait_until_ready()
-    statuses = ["Minecraft in class", "!info for help", "CS:GO in class"]
+    statuses = ["Minecraft in class", "!info for help", "CS:GO in class", "League of legends in class", "Valorant in class"]
     while not bot.is_closed():
         status = random.choice(statuses)
         await bot.change_presence(activity=discord.Game(name=status))
         await asyncio.sleep(5)
 
+async def checkvoice():
+    global hassave
+    global saveVoice
+    await bot.wait_until_ready()
+    guild = discord.utils.get(bot.guilds, name=GUILD)
+    if hassave == 0:
+        for voicechanel in guild.voice_channels:
+            saveVoice.append(voicechanel)
+            print(saveVoice)
+        hassave = 1
+    #for voicechanel in guild.voice_channels:
+    #   print(voicechanel.name)
+    #   if voicechanel.name == 'DATA19':
+    #       await voicechanel.edit(reasone=None, name='Cheese')
+    await asyncio.sleep(2)
+
+bot.loop.create_task(changestatus())
 bot.loop.create_task(checkvoice())
 bot.run(TOKEN)
