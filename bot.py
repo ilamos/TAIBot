@@ -3,6 +3,7 @@ import os
 import time
 import discord
 import random
+import asyncio
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -11,11 +12,13 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents = intents)
+bot.remove_command('help')
 
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=GUILD)
     os.system('cls')
+    await bot.change_presence(activity=discord.Game(name="!info"))
     print(
         '[-------------Connection success-------------] \n'
         f'{bot.user} Is connected to {guild.name}'
@@ -58,9 +61,17 @@ async def onlinerole(ctx, role: discord.Role):
                 rolemems = rolemems + 1
                 if str(member.status) != 'offline':
                     onlinemems = onlinemems + 1
-    await ctx.send(
-                f'{role.mention} has {onlinemems} out of {rolemems} online'
-                )
+    embed=discord.Embed()
+    embed.add_field(name=role.name, value=f'{role.mention} has {onlinemems} out of {rolemems} online', inline=False)
+    await ctx.send(embed=embed)
 
+async def checkvoice():
+    await bot.wait_until_ready()
+    statuses = ["Minecraft in class", "!info for help", "CS:GO in class"]
+    while not bot.is_closed():
+        status = random.choice(statuses)
+        await bot.change_presence(activity=discord.Game(name=status))
+        await asyncio.sleep(5)
 
+bot.loop.create_task(checkvoice())
 bot.run(TOKEN)
