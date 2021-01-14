@@ -9,14 +9,15 @@ from discord.ext import commands
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-bot = commands.Bot(command_prefix='!')
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix='!', intents = intents)
 
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=GUILD)
     os.system('cls')
     print(
-        '-------Connection success------'
+        '[-------------Connection success-------------] \n'
         f'{bot.user} Is connected to {guild.name}'
     )
 
@@ -41,6 +42,25 @@ async def contactinfo(ctx):
     embed.add_field(name="Thomas", value="+381884719", inline=True)
     embed.set_footer(text="TAIBot - Contact Information.")
     await ctx.author.dm_channel.send(embed=embed)
+
+@bot.command()
+async def onlinerole(ctx, role: discord.Role):
+    guild = discord.utils.get(bot.guilds, name=GUILD)
+    rolemems = 0
+    onlinemems = 0
+    await ctx.send(role.mention)
+    for member in guild.members:
+        for _role in member.roles:
+            if _role.id == role.id:
+                print(
+                    f'{member.name} has role {role.name}'
+                )
+                rolemems = rolemems + 1
+                if str(member.status) != 'offline':
+                    onlinemems = onlinemems + 1
+    await ctx.send(
+                f'{role.mention} has {onlinemems} out of {rolemems} online'
+                )
 
 
 bot.run(TOKEN)
