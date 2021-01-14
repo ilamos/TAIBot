@@ -68,28 +68,38 @@ async def onlinerole(ctx, role: discord.Role):
 
 async def changestatus():
     await bot.wait_until_ready()
-    statuses = ["Minecraft in class", "!info for help", "CS:GO in class", "League of legends in class", "Valorant in class"]
+    statuses = ["Minecraft in class", "!info for help", "CS:GO in class", "Roblox in class", "Valorant in class"]
     while not bot.is_closed():
         status = random.choice(statuses)
         await bot.change_presence(activity=discord.Game(name=status))
         await asyncio.sleep(5)
 
 async def checkvoice():
+    await bot.wait_until_ready()
     global hassave
     global saveVoice
-    await bot.wait_until_ready()
-    guild = discord.utils.get(bot.guilds, name=GUILD)
-    if hassave == 0:
-        for voicechanel in guild.voice_channels:
-            saveVoice.append(voicechanel)
-            print(saveVoice)
+    while not bot.is_closed():
+        await asyncio.sleep(5)
+        guild = discord.utils.get(bot.guilds, name=GUILD)
+        if hassave == 0:
+            for voicechanel in guild.voice_channels:
+                saveVoice.append(voicechanel)
+
         hassave = 1
-    #for voicechanel in guild.voice_channels:
-    #   print(voicechanel.name)
-    #   if voicechanel.name == 'DATA19':
-    #       await voicechanel.edit(reasone=None, name='Cheese')
-    await asyncio.sleep(2)
+        
+        for voicechanel in guild.voice_channels:
+            print(len(voicechanel.members))
+            stringformat = f'({len(voicechanel.members)})'
+            indexof = guild.voice_channels.index(voicechanel)
+            line = saveVoice[indexof].name + stringformat
+            print(saveVoice[indexof].name)
+            #await voicechanel.edit(reasone=None, name=line)
+            await asyncio.sleep(1)
 
 bot.loop.create_task(changestatus())
 bot.loop.create_task(checkvoice())
 bot.run(TOKEN)
+#for voicechanel in guild.voice_channels:
+#   print(voicechanel.name)
+#   if voicechanel.name == 'DATA19':
+#       await voicechanel.edit(reasone=None, name='Cheese')
