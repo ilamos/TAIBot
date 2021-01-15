@@ -17,6 +17,8 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents = intents)
 bot.remove_command('help')
 saveVoice = []
+
+
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=GUILD)
@@ -29,15 +31,14 @@ async def on_ready():
 
 @bot.command()
 async def poll(ctx, polltitle, amanswers, length, *answers):
-    print('Poll commanded') #1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣
+    print('[Commands] Poll called') #1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣
     emojilist = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-    embed=discord.Embed(title="Poll", description=f'Poll created by {ctx.author.mention}', color=0xff0000)
+    embed=discord.Embed(title=polltitle, description=f'Poll created by {ctx.author.mention}', color=0xff0000)
     answerslist = ''
     amanswersl = min(int(amanswers), 9, len(answers))
     answerstrue = answers[0 : amanswersl]
     for answer in answerstrue:
         answerslist = answerslist + f'{answer} '
-        print(answer)
         embed.add_field(name=str(answerstrue.index(answer) + 1), value=f'{answer}', inline=False)
     embed.set_footer(text="TAIBot - Poll")
     pollmessage = await ctx.send(embed=embed)
@@ -60,10 +61,7 @@ async def poll(ctx, polltitle, amanswers, length, *answers):
     messagereacts = cache_msg.reactions
     highest = messagereacts[0]
     tied = ' '
-    print(messagereacts)
     for currreact in messagereacts[:amanswersl]:
-        print("Reaction: " + str(currreact.count))
-        print("Highest:" + str(highest.count))
         if currreact.count == highest.count:
             tied = f'{tied} {answerstrue[messagereacts.index(currreact)]}'
         if currreact.count > highest.count:
@@ -71,7 +69,7 @@ async def poll(ctx, polltitle, amanswers, length, *answers):
             tied = ' '
     winner = answerstrue[messagereacts.index(highest)]
     if not tied == ' ':
-        print('Score tied, printing multiple winners')
+        print('[Poll] Score tied, printing multiple winners')
         winner = tied
     donembed=discord.Embed(color=0xff0000)
     donembed.add_field(name='Poll ended', value=f'Poll ended winner: {winner}', inline=False)
@@ -80,19 +78,19 @@ async def poll(ctx, polltitle, amanswers, length, *answers):
 
 @bot.command(name = 'info',)
 async def info(ctx):
-    print('Info commanded')
+    print('[Commands] Info called')
     embed=discord.Embed(title="Commands", description="Useful information about the bots commands", color=0xff0000)
     embed.set_thumbnail(url="https://pbs.twimg.com/profile_images/1305379416772620290/C8r6a81q_400x400.jpg")
-    embed.add_field(name="!info", value="Brings up this window. \n !info", inline=False)
-    embed.add_field(name="!onlinerole", value="Checks how many of the role are online. \n !onlinerole {@Role} ", inline=False)
-    embed.add_field(name="!contactinfo", value="Direct messages you contact info about TAI staff \n !contactinfo", inline=False)
-    embed.add_field(name="!poll", value="Creates a poll with reactions \n !poll {amount out answers} {time (minutes)} {answers separated by spaces, surrounded by quotes}", inline=False)
+    embed.add_field(name="!info", value="Brings up this help window. \n !info", inline=False)
+    embed.add_field(name="!onlinerole", value="Checks how many members of the role are online. \n !onlinerole {@Role} ", inline=False)
+    embed.add_field(name="!contactinfo", value="Direct messages you contact info about TAI staff. \n !contactinfo", inline=False)
+    embed.add_field(name="!poll", value="Creates a poll with reactions. \n !poll {Poll title} {amount out answers} {time (minutes)} {answers separated by spaces, surrounded by quotes}", inline=False)
     embed.set_footer(text="TAIBot - Information window.")
     await ctx.send(embed=embed)
 
 @bot.command()
 async def contactinfo(ctx):
-    print('Contact info commanded')
+    print('[Commands] Contact info called')
     await ctx.author.create_dm()
     await ctx.send("Direct messaging you the contact info!")
     embed=discord.Embed(title="Here is your information!", description="Contact information for the TAI staff", color=0xff0000)
@@ -103,6 +101,7 @@ async def contactinfo(ctx):
 
 @bot.command()
 async def onlinerole(ctx, role: discord.Role):
+    print('[Commands] Onlinerole called')
     guild = discord.utils.get(bot.guilds, name=GUILD)
     rolemems = 0
     onlinemems = 0
@@ -110,7 +109,7 @@ async def onlinerole(ctx, role: discord.Role):
         for _role in member.roles:
             if _role.id == role.id:
                 print(
-                    f'{member.name} has role {role.name}'
+                    f'[Onlinerole] {member.name} has role {role.name} and is {member.status}'
                 )
                 rolemems = rolemems + 1
                 if str(member.status) != 'offline':
