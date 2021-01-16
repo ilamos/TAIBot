@@ -30,6 +30,24 @@ async def on_ready():
     )
 
 @bot.command()
+async def groupselector(ctx, groups, memgroups, *people):
+    print('[Commands] Groupselector called')
+    groupam = int(groups)
+    memberg = int(memgroups)
+    people = list(people)
+    groupstring = ''
+    embed=discord.Embed(title="Group selector", description=f'Groups selected', color=0xff0000)
+    for group in range(groupam):
+        peopleing = ''
+        groupstring = groupstring + f' Group {group + 1}:'
+        for personum in range(memberg):
+            person = random.choice(people)
+            peopleing = peopleing + person + ", "
+            people.remove(person)
+        embed.add_field(name=f' Group {group + 1}:', value=f'{peopleing[:-2]}', inline=False)
+    await ctx.send(embed=embed)
+
+@bot.command()
 async def poll(ctx, polltitle, amanswers, length, *answers):
     print('[Commands] Poll called') #1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣
     emojilist = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
@@ -85,7 +103,59 @@ async def info(ctx):
     embed.add_field(name="!onlinerole", value="Checks how many members of the role are online. \n !onlinerole {@Role} ", inline=False)
     embed.add_field(name="!contactinfo", value="Direct messages you contact info about TAI staff. \n !contactinfo", inline=False)
     embed.add_field(name="!poll", value="Creates a poll with reactions. \n !poll {Poll title} {amount out answers} {time (minutes)} {answers separated by spaces, surrounded by quotes}", inline=False)
+    embed.add_field(name="!timer", value="Sets up a countdown timer. \n !timer {s = seconds, m = minutes} {length}", inline=False)
+    embed.add_field(name="!dice", value="Rolls dice. \n !dice {amount of dice} {sides of dice}", inline=False)
+    embed.add_field(name="!groupselector", value="Randomly chooses groups out of a list of people. \n !groupselector {amount of groups} {people per group} {people to select from, separated by spaces surronded by quotes}", inline=False)
+    embed.add_field(name="!helpme", value="Gives more information on a specified command and gives an example. \n !helpme {command without !}", inline=False)
     embed.set_footer(text="TAIBot - Information window.")
+    await ctx.send(embed=embed)
+
+@bot.command(name = 'helpme')
+async def helpme(ctx, command):
+    print('[Commands] helpme called')
+    if command = "info":
+        
+
+@bot.command(name = 'timer')
+async def timer(ctx, sorm, length):
+    print('[Commands] Timer called')
+    lengint = int(length)
+    if sorm == 's':
+        print('[Timer] Seconds selected')
+        embed = discord.Embed(title="Timer", description=f'Time left: {lengint} second(s).', color=0xff0000)
+        timermsg = await ctx.send(embed=embed)
+        for sec in range(lengint)[1:]:
+            await asyncio.sleep(1)
+            newembed = discord.Embed(title="Timer", description=f'Time left: {lengint - sec} second(s).', color=0xff0000)
+            await timermsg.edit(embed=newembed)
+        await asyncio.sleep(1)
+        finishedembed = discord.Embed(title="Timer", description=f'Time is up!.', color=0xff0000)
+        await timermsg.edit(embed=finishedembed)
+        print('[Timer] Finished')
+    elif sorm == 'm':
+        print('[Timer] Minutes selected')
+        embed = discord.Embed(title="Timer", description=f'Time left: {lengint} minute(s).', color=0xff0000)
+        timermsg = await ctx.send(embed=embed)
+        for minl in range(lengint)[1:]:
+            await asyncio.sleep(60)
+            newembed = discord.Embed(title="Timer", description=f'Time left: {lengint - minl} minute(s).', color=0xff0000)
+            await timermsg.edit(embed=newembed)
+        await asyncio.sleep(60)
+        finishedembed = discord.Embed(title="Timer", description=f'Time is up!.', color=0xff0000)
+        await timermsg.edit(embed=finishedembed)
+        print('[Timer] Finished')
+
+@bot.command(name='dice')
+async def dice(ctx, adice, sdice):
+    print('[Commands] Dice called')
+    amountdice = int(adice)
+    sidedice = int(sdice) + 1
+    dicestring = ''
+    for die in range(amountdice):
+        diceresult = random.randrange(1, sidedice)
+        dicestring = dicestring + str(diceresult) + " "
+    print('[Dice] Result: ' + dicestring)
+    embed = discord.Embed(title="Dice", description=f'Dice result(s): {dicestring}', color=0xff0000)
     await ctx.send(embed=embed)
 
 @bot.command()
