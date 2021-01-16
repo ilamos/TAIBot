@@ -31,7 +31,7 @@ async def on_ready():
 
 @bot.command()
 async def groupselector(ctx, groups, memgroups, *people):
-    print('[Commands] Groupselector called')
+    print('[Commands] Group selector called')
     groupam = int(groups)
     memberg = int(memgroups)
     people = list(people)
@@ -51,7 +51,7 @@ async def groupselector(ctx, groups, memgroups, *people):
 async def poll(ctx, polltitle, amanswers, length, *answers):
     print('[Commands] Poll called') #1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣
     emojilist = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-    embed=discord.Embed(title=polltitle, description=f'Poll created by {ctx.author.mention}', color=0xff0000)
+    embed=discord.Embed(title=polltitle, description=f'Poll created by {ctx.author.mention} \nReact with the corresponding emoji to answer.', color=0xff0000)
     answerslist = ''
     amanswersl = min(int(amanswers), 9, len(answers))
     answerstrue = answers[0 : amanswersl]
@@ -102,7 +102,7 @@ async def info(ctx):
     embed.add_field(name="!info", value="Brings up this help window. \n !info", inline=False)
     embed.add_field(name="!onlinerole", value="Checks how many members of the role are online. \n !onlinerole {@Role} ", inline=False)
     embed.add_field(name="!contactinfo", value="Direct messages you contact info about TAI staff. \n !contactinfo", inline=False)
-    embed.add_field(name="!poll", value="Creates a poll with reactions. \n !poll {Poll title} {amount out answers} {time (minutes)} {answers separated by spaces, surrounded by quotes}", inline=False)
+    embed.add_field(name="!poll", value="Creates a poll with reactions. \n !poll {Poll title} {amount of answers} {time (minutes)} {answers separated by spaces, surrounded by quotes}", inline=False)
     embed.add_field(name="!timer", value="Sets up a countdown timer. \n !timer {s = seconds, m = minutes} {length}", inline=False)
     embed.add_field(name="!dice", value="Rolls dice. \n !dice {amount of dice} {sides of dice}", inline=False)
     embed.add_field(name="!groupselector", value="Randomly chooses groups out of a list of people. \n !groupselector {amount of groups} {people per group} {people to select from, separated by spaces surronded by quotes}", inline=False)
@@ -112,8 +112,36 @@ async def info(ctx):
 
 @bot.command(name = 'helpme')
 async def helpme(ctx, command):
-    print('[Commands] helpme called')
-    if command = "info":
+    print('[Commands] Helpme called')
+    embed=discord.Embed(title="Command help", description=f'Information and example of the command {command}', color=0xff0000)
+    if command == "info":
+            embed.add_field(name="Info", value="Brings up a help window with all commands and information about them.", inline=False)
+            embed.add_field(name="Example", value="!info", inline=False)
+    elif command == "onlinerole":
+            embed.add_field(name="Info", value="Checks and tells you how many of the specified role are online.", inline=False)
+            embed.add_field(name="Example", value="!onlinerole @DATA20", inline=False)
+    elif command == "contactinfo":
+            embed.add_field(name="Info", value="Direct messages you contact information about some of the TAI data staff.", inline=False)
+            embed.add_field(name="Example", value="!contactinfo", inline=False)
+    elif command == "poll":
+            embed.add_field(name="Info", value="Makes a poll that users can vote on, lasts a specified time before giving the winner.", inline=False)
+            embed.add_field(name="Example", value="!poll \"Hur lång ska klassen va\" 3 1 \"2h\" \"1h\" \"15h\"", inline=False)
+    elif command == "timer":
+            embed.add_field(name="Info", value="Sets up a live countdown timer that counts down from the specified time.", inline=False)
+            embed.add_field(name="Example", value="!timer m 10", inline=False)
+    elif command == "dice":
+            embed.add_field(name="Info", value="Rolls the specified dice and amount of dice and gives you the answer.", inline=False)
+            embed.add_field(name="Example", value="!dice 2 6", inline=False)
+    elif command == "groupselector":
+            embed.add_field(name="Info", value="Automatically splits up the listed people in to specified groups.", inline=False)
+            embed.add_field(name="Example", value="!groupselector 3 2 \"Mikael\" \"Emil\" \"Elias\" \"Jon\" \"Karl\" \"Amos\"", inline=False)
+    elif command == "helpme":
+            embed.add_field(name="Info", value="Gives you information and an example about a specified command.", inline=False)
+            embed.add_field(name="Example", value="!helpme poll", inline=False)
+    else:
+        embed=discord.Embed(title='Unkown command', description=f'You typed: {command}, please make sure you are only typing the command without the ! and all lowercase.', color=0xff0000)
+    await ctx.send(embed = embed)
+
         
 
 @bot.command(name = 'timer')
@@ -171,7 +199,7 @@ async def contactinfo(ctx):
 
 @bot.command()
 async def onlinerole(ctx, role: discord.Role):
-    print('[Commands] Onlinerole called')
+    print('[Commands] Online role called')
     guild = discord.utils.get(bot.guilds, name=GUILD)
     rolemems = 0
     onlinemems = 0
