@@ -1,6 +1,12 @@
 # TAIBot
  A bot for discord using discord.py
 
+// Requirements
+1. Python
+2. Discord.py 
+3. Dotenv
+4. Asyncio
+
 // Setup
 1. Clone the repository in a good location
 2. Edit the .env file with your details
