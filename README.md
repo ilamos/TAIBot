@@ -1,4 +1,4 @@
-# PythonDiscordSchoolBot
+# TAIBot
  A bot for discord using discord.py
 
 // Setup
