@@ -7,6 +7,7 @@
 3. Run the bot!
 
 // Features
+
 !info.
 Brings up help window.
 
