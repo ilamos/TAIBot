@@ -31,3 +31,5 @@ Randomly chooses groups out of a list of people.
 
 !helpme {command without !}.
 Gives more information on a specified command and gives an example.
+
+Voice channel display mode: Shows how many people are in a voice channel, disabled by default because discord rate limits it.
