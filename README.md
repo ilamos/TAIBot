@@ -32,7 +32,7 @@ Sets up a countdown timer.
 !dice {amount of dice} {sides of dice}.
 Rolls dice.
 
-!groupselector {amount of groups} {people per group} {people to select from, separated by spaces surronded by quotes}.
+!groupselector {amount of groups} {people per group} {people to select from, separated by spaces surrounded by quotes}.
 Randomly chooses groups out of a list of people.
 
 !helpme {command without !}.
